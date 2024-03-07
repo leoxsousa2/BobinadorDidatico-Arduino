@@ -1,3 +1,5 @@
+//Esse codigo pode ser executador virtualmente no site: https://wokwi.com/
+
 // C++ code
 //
 /*                                                        */
