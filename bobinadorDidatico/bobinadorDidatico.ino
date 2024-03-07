@@ -26,8 +26,9 @@
 /*    =========================================           */
 /*########################################################*/
 
+//Obs.: Baixar a biblioteca LiquidCrystal_I2C
 #include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal_I2C.h>  
 #include <Stepper.h>
 #include <Servo.h>
 
@@ -417,7 +418,7 @@ if ((tela == 4) && (imprimir == "sim")) {
     imprimir = "nao";
     }
   //Botão 4                 -------------------------------------------//----------------------------------------------
-    else if ((tela == 5) && (imprimir == "nao") && (tBt4 > 50) && (tBt4 <= 300)) {tBt4 = 0;
+    else if ((tela == 5) && (imprimir == "nao") && (tBt4 > 50) && (tBt4 <= 300) && (Espiras > 0)) {tBt4 = 0;
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Executanto...");
@@ -446,7 +447,7 @@ if ((tela == 4) && (imprimir == "sim")) {
       lcd.setCursor(8,1);
       lcd.print("esp= 1");
 
-      
+      contservo = contservo + 2;  /* Depois da aceleração o servo motor adiciona 2 passos */
       int contSinal = "+";
       for (int volta = 0; volta < espiras; volta++) {
         lcd.setCursor(8,1);
@@ -455,8 +456,8 @@ if ((tela == 4) && (imprimir == "sim")) {
         myStepper.setSpeed(vel);
         myStepper.step(1 * stepsPerRevolution);
         //Vai e vem do servo motor
-        if (contSinal == "+") {contservo = contservo + 2; myservo.write(contservo);}
-        if (contSinal == "-") {contservo = contservo - 2; myservo.write(contservo);}
+        if (contSinal == "+") {contservo = contservo + 1; myservo.write(contservo);}
+        if (contSinal == "-") {contservo = contservo - 1; myservo.write(contservo);}
         if (contservo == angServoFinal)  {contSinal = "-";} if (contservo == contServInit) {contSinal = "+";}
         // fim
       }
@@ -464,10 +465,10 @@ if ((tela == 4) && (imprimir == "sim")) {
       lcd.print("Pronto!      ");
       lcd.setCursor(0,1);
       lcd.print("Vel= 0 ");
-      myservo.write(0);
-
+      myservo.write(contServInit);
       delay(2000);
       digitalWrite(10, HIGH);
+      Espiras = 0;   /*Este codigo é para não permitir que ao apertar o botão 4, volte a executar a mesma programação*/
       
 
     }
